@@ -1,0 +1,1 @@
+docker run -d -p 6379:6379 -v $(pwd)/redis/data:/data --name vybe_redis vybe_redis

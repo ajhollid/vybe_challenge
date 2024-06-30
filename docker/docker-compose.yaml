@@ -1,0 +1,23 @@
+services:
+  client:
+    image: vybe_client:latest
+    ports:
+      - "5173:5173"
+    env_file:
+      - .env
+    depends_on:
+      - server
+  server:
+    image: vybe_server:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+  redis:
+    image: vybe_redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/data
