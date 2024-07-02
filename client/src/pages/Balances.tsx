@@ -12,7 +12,7 @@ const Balances = () => {
     options: {},
     series: [],
     type: "bar",
-    width: "500",
+    width: "800",
   });
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const Balances = () => {
         },
         series: response.data.series,
         type: "bar",
-        width: "500",
+        width: "800",
       };
       setWalletData(walletData);
     });

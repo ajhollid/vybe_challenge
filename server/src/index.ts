@@ -1,4 +1,6 @@
 import express, { Express, NextFunction, Request, Response } from "express";
+import { Server as WebSocketServer } from "ws";
+import http from "http";
 import cors from "cors";
 import dotenv from "dotenv";
 import { Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
@@ -10,12 +12,20 @@ import ErrorHandler from "./middleware/ErrorHandler";
 dotenv.config();
 
 import { TOP_TOKENS, TOP_WALLETS } from "./data";
+import TimeSeriesService from "./service/TimeSeriesService";
 
 const PORT = process.env.PORT || 3000;
 const REDIS_PORT = Number(process.env.REDIS_PORT) || 6379;
 const REDIS_HOST = process.env.REDIS_HOST || "";
 const MINS_OF_TPS_DATA = 30;
 const app: Express = express();
+
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server });
+
+server.listen(3001, () => {
+  console.log("WS listening on 3001");
+});
 
 app.use(cors());
 const redis = new Redis(REDIS_PORT, REDIS_HOST);
@@ -25,6 +35,25 @@ redis.on("connect", () => {
 
 const connection = new Connection(
   `https://solana-mainnet.rpc.extrnode.com/${process.env.API_KEY}`
+);
+
+wss.on("connection", (ws) => {
+  timeSeriesService.getDataFromRedis().then((data) => {
+    timeSeriesService.sendDatatoClient(data);
+  });
+
+  ws.on("message", (message) => {
+    console.log("Received message:", message);
+  });
+
+  // You can send data to the client from here
+  ws.send(JSON.stringify({ message: "Welcome to the WebSocket server!" }));
+});
+
+const timeSeriesService: TimeSeriesService = new TimeSeriesService(
+  connection,
+  redis,
+  wss
 );
 
 app.get(
@@ -103,33 +132,10 @@ app.get(
 app.get(
   "/api/v1/tps",
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const cahcedData = await redis.get("tps");
-      if (cahcedData) {
-        console.log("TPS cache hit");
-        res.status(200).json(JSON.parse(cahcedData));
-        return;
-      }
-
-      // Get recent performance stats
-      const recentPerformance = await connection.getRecentPerformanceSamples(
-        MINS_OF_TPS_DATA
-      );
-
-      // Caluclate TPS
-      const tpsArray = recentPerformance.map((performance, index) => [
-        index,
-        performance.numTransactions / performance.samplePeriodSecs,
-      ]);
-
-      const returnData = { series: [{ name: "TPS", data: tpsArray }] };
-
-      // TPS is returned in 1 minute intervals, so invalidating cache after 1 minute seems reasonable
-      redis.set("tps", JSON.stringify(returnData), "EX", 60);
-      res.status(200).json(returnData);
-    } catch (error) {
-      next(error);
-    }
+    const wsDetails = {
+      url: "ws://localhost:3001", // Specify the actual WebSocket server URL here
+    };
+    res.status(200).json(wsDetails);
   }
 );
 

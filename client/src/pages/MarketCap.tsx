@@ -14,7 +14,7 @@ const MarketCap = () => {
     options: {},
     series: [],
     type: "bar",
-    width: "500",
+    width: "800",
   });
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const MarketCap = () => {
           },
           series: response.data.series,
           type: "pie",
-          width: "500",
+          width: "800",
         };
         setMarketCapData(marketCapData);
       })
