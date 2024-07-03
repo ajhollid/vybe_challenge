@@ -6,7 +6,7 @@ export default {
   },
   moduleNameMapper: {
     "\\.(css|less)$": "<rootDir>/src/__tests__/__mocks__/styleMock.js",
-    "\\.svg$": "<rootDir>/src/__tests__/__mocks__/svgMock.js",
+    "\\.(jpg|jpeg|png|svg)$": "<rootDir>/src/__tests__/__mocks__/dummyImage.js",
   },
   testPathIgnorePatterns: ["/__mocks__/"],
 };

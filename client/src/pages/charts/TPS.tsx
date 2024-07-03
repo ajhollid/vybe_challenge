@@ -17,66 +17,76 @@ const TPS = () => {
     width: "300",
   });
 
+  const connectToWs = (msg: MessageEvent<any>) => {
+    const wsData: WsTpsData[] = msg.data;
+    const formattedTpsData = wsData
+      .sort((a, b) => {
+        return a.date - b.date;
+      })
+      .map((wsTps) => {
+        return [wsTps.date, wsTps.TPS];
+      });
+
+    const series = [{ name: "TPS", data: formattedTpsData }];
+
+    const tpsChartData: ChartData = {
+      options: {
+        yaxis: {
+          title: {
+            text: "Transactions per second",
+          },
+          labels: {
+            formatter: (value: number) => Math.round(value),
+          },
+        },
+        xaxis: {
+          title: {
+            text: "Date (Updated every minute)",
+          },
+          labels: {
+            formatter: (value: number) => {
+              const date = new Date(value);
+              return date.toLocaleString("en-US", {
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              });
+            },
+          },
+        },
+        dataLabels: { enabled: false },
+        stroke: { curve: "smooth" },
+        theme: {
+          mode: "dark", // Can be 'light' or 'dark'
+          palette: "palette2", // Up to 'palette10' or custom colors array
+        },
+      },
+      series: series,
+      type: "line",
+    };
+    setTpsData(tpsChartData);
+  };
+
   useEffect(() => {
     let wsClient: WebSocketClient | null = null;
-    axios.get<WsDetails>(`${BASE_URL}/tps`).then((response) => {
-      const wsUrl = response.data.url;
-      wsClient = new WebSocketClient(wsUrl);
-      wsClient.ws.onmessage = (message) => {
-        const msg = JSON.parse(message.data);
-        if (msg.code === TPS_DATA_CODE) {
-          const wsData: WsTpsData[] = msg.data;
-          const formattedTpsData = wsData
-            .sort((a, b) => {
-              return a.date - b.date;
-            })
-            .map((wsTps) => {
-              return [wsTps.date, wsTps.TPS];
-            });
 
-          const series = [{ name: "TPS", data: formattedTpsData }];
-
-          const tpsChartData: ChartData = {
-            options: {
-              yaxis: {
-                title: {
-                  text: "Transactions per second",
-                },
-                labels: {
-                  formatter: (value: number) => Math.round(value),
-                },
-              },
-              xaxis: {
-                title: {
-                  text: "Date (Updated every minute)",
-                },
-                labels: {
-                  formatter: (value: number) => {
-                    const date = new Date(value);
-                    return date.toLocaleString("en-US", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
-                    });
-                  },
-                },
-              },
-              dataLabels: { enabled: false },
-              stroke: { curve: "smooth" },
-              theme: {
-                mode: "dark", // Can be 'light' or 'dark'
-                palette: "palette2", // Up to 'palette10' or custom colors array
-              },
-            },
-            series: series,
-            type: "line",
-          };
-          setTpsData(tpsChartData);
-        }
-      };
-    });
+    axios
+      .get<WsDetails>(`${BASE_URL}/tps`)
+      .then((response) => {
+        const wsUrl = response.data.url;
+        wsClient = new WebSocketClient(wsUrl);
+        wsClient.ws.onmessage = (message) => {
+          const msg = JSON.parse(message.data);
+          if (msg.code === TPS_DATA_CODE) {
+            connectToWs(msg);
+          }
+        };
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
     return () => {
       if (wsClient) {
