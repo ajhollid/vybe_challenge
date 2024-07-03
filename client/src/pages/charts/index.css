@@ -6,6 +6,7 @@
 }
 
 .container {
+  margin-top: 4rem;
   max-width: 800px;
   width: 100%;
 }
@@ -13,14 +14,18 @@
 .header {
   display: flex;
   width: 100%;
+  justify-content: center;
   align-items: center;
   color: #ffffff;
   background-color: #001aff;
-  padding-left: 75px;
   height: 75px;
 }
 
 @media (min-width: 801px) {
+  .header {
+    justify-content: left;
+    padding-left: 75px;
+  }
   .container {
     background-color: rgb(199, 199, 199);
   }

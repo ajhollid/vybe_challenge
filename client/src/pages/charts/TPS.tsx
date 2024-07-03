@@ -98,7 +98,7 @@ const TPS = () => {
   return (
     <div className="chart-content">
       <div className="header">
-        <h1>Transactions per Second</h1>
+        <h1>Transactions per/s</h1>
       </div>
       <div className="container chart">
         <CustomChart data={tpsData} />
