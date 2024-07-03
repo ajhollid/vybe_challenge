@@ -36,7 +36,9 @@ jest.mock("axios");
 test("TPS renders", async () => {
   server = new Server("ws://localhost:3001");
   server.on("connection", (socket) => {
-    socket.on("message", (data) => {});
+    socket.on("message", (data) => {
+      console.log(data);
+    });
   });
 
   const mockData = { data: { url: "ws://localhost:3001" } };
@@ -51,7 +53,9 @@ test("TPS renders", async () => {
 test("TPS renders and makes API call", async () => {
   server = new Server("ws://localhost:3001");
   server.on("connection", (socket) => {
-    socket.on("message", (data) => {});
+    socket.on("message", (data) => {
+      console.log(data);
+    });
   });
 
   const mockData = { data: { url: "ws://localhost:3001" } };

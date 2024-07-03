@@ -3,7 +3,6 @@
     "jsx": "react",
     "esModuleInterop": true
   },
-  "include": ["src/components", "custom.d.ts"],
   "files": [],
   "references": [
     {
