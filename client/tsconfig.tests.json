@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "strict": false, // You can turn off strict type-checking for tests
+    "types": ["jest", "node"]
+  },
+  "include": ["**/*.test.tsx", "**/*.test.ts", "src/**/*", "types/**/*"]
+}

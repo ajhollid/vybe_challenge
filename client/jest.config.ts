@@ -9,4 +9,9 @@ export default {
     "\\.(jpg|jpeg|png|svg)$": "<rootDir>/src/__tests__/__mocks__/dummyImage.js",
   },
   testPathIgnorePatterns: ["/__mocks__/"],
+  globals: {
+    "ts-jest": {
+      tsconfig: "tsconfig.tests.json",
+    },
+  },
 };
