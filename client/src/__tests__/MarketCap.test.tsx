@@ -2,7 +2,7 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import axios from "axios";
-import MarketCap from "../pages/MarketCap";
+import MarketCap from "../pages/charts/MarketCap";
 
 jest.mock("../utils/env", () => ({
   BASE_URL: "http://localhost:3000/api/v1",

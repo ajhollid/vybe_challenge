@@ -1,11 +1,12 @@
 // @ts-ignore
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ChartData from "../types/ChartData";
-import MarketCapData from "../types/MarketCapData";
-import CustomChart from "../components/CustomChart/CustomChart";
+import ChartData from "../../types/ChartData";
+import MarketCapData from "../../types/MarketCapData";
+import CustomChart from "../../components/CustomChart/CustomChart";
+import "./index.css";
 
-import ENV_VARS from "../utils/env";
+import ENV_VARS from "../../utils/env";
 
 const BASE_URL = ENV_VARS.BASE_URL;
 
@@ -14,7 +15,7 @@ const MarketCap = () => {
     options: {},
     series: [],
     type: "bar",
-    width: "800",
+    width: "300",
   });
 
   useEffect(() => {
@@ -24,10 +25,13 @@ const MarketCap = () => {
         const marketCapData: ChartData = {
           options: {
             labels: response.data.labels,
+            theme: {
+              mode: "dark", // Can be 'light' or 'dark'
+              palette: "palette2", // Up to 'palette10' or custom colors array
+            },
           },
           series: response.data.series,
           type: "pie",
-          width: "800",
         };
         setMarketCapData(marketCapData);
       })
@@ -37,8 +41,13 @@ const MarketCap = () => {
   }, []);
 
   return (
-    <div>
-      <CustomChart data={marketCapData} />
+    <div className="chart-content">
+      <div className="header">
+        <h1>Market Cap</h1>
+      </div>
+      <div className="container chart">
+        <CustomChart data={marketCapData} />
+      </div>
     </div>
   );
 };

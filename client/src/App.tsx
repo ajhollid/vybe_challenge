@@ -1,8 +1,8 @@
 import "./App.css";
-import Home from "./pages/Home";
-import TPS from "./pages/TPS";
-import MarketCap from "./pages/MarketCap";
-import TopWallets from "./pages/Balances";
+import Home from "./pages/home/";
+import TPS from "./pages/charts/TPS";
+import MarketCap from "./pages/charts/MarketCap";
+import TopWallets from "./pages/charts/Balances";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {

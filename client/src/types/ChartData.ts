@@ -20,7 +20,7 @@ interface ChartData {
   type: ChartType;
   options: Record<string, unknown>;
   series: any;
-  width: string;
+  width?: string;
 }
 
 export default ChartData;

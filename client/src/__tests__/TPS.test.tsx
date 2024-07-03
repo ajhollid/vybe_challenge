@@ -2,7 +2,7 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import axios from "axios";
-import TPS from "../pages/TPS";
+import TPS from "../pages/charts/TPS";
 
 jest.mock("../utils/env", () => ({
   BASE_URL: "http://localhost:3000/api/v1",

@@ -1,10 +1,10 @@
 // @ts-ignore
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ChartData from "../types/ChartData";
-import WalletData from "../types/WalletData";
-import CustomChart from "../components/CustomChart/CustomChart";
-import ENV_VARS from "../utils/env";
+import ChartData from "../../types/ChartData";
+import WalletData from "../../types/WalletData";
+import CustomChart from "../../components/CustomChart/CustomChart";
+import ENV_VARS from "../../utils/env";
 
 const BASE_URL = ENV_VARS.BASE_URL;
 const Balances = () => {
@@ -12,7 +12,7 @@ const Balances = () => {
     options: {},
     series: [],
     type: "bar",
-    width: "800",
+    width: "300",
   });
 
   useEffect(() => {
@@ -49,18 +49,26 @@ const Balances = () => {
               },
             },
           },
+          theme: {
+            mode: "dark", // Can be 'light' or 'dark'
+            palette: "palette2", // Up to 'palette10' or custom colors array
+          },
         },
         series: response.data.series,
         type: "bar",
-        width: "800",
       };
       setWalletData(walletData);
     });
   }, []);
 
   return (
-    <div>
-      <CustomChart data={walletData} />
+    <div className="chart-content">
+      <div className="header">
+        <h1>Balances</h1>
+      </div>
+      <div className="container chart">
+        <CustomChart data={walletData} />
+      </div>
     </div>
   );
 };

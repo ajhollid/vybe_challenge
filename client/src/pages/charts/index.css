@@ -1,0 +1,32 @@
+.chart-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  background-color: #001aff;
+  height: 75px;
+  justify-content: center;
+}
+
+@media (min-width: 801px) {
+  .container {
+    background-color: rgb(199, 199, 199);
+  }
+
+  .chart {
+    padding: 1rem;
+    margin: 4rem 4rem 4rem 4rem;
+  }
+}
